@@ -64,35 +64,27 @@ fun MainScreen(innerPadding: PaddingValues) {
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally //Ajouté pour centrer le contenu
     ) {
-        //Correction de l'image
         Image(
             painter = painterResource(id = R.drawable.logoisen), // Chargement de l'image depuis drawable
             contentDescription = "Logo ISEN",
             modifier = Modifier.size(100.dp) // Taille de l'image
         )
-
-        // Correction du texte
         Text(
             text = "Hello ISEN"
         )
-
-        // Correction de la Row et du champ de texte
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Red),
             verticalAlignment = Alignment.CenterVertically // Alignement vertical pour la Row
         ) {
-            // Correction de TextField
             TextField(
                 value = "", // Ajout d'une valeur vide pour éviter l'erreur
                 onValueChange = {}, // Ajout de la fonction pour éviter l'erreur
                 modifier = Modifier.weight(1f) // Permet au champ de texte d'occuper l'espace disponible
             )
-
-            // Correction de l'image (décommentée et corrigée)
             Image(
-                painter = painterResource(id = R.drawable.logoisen), // Chargement d'une autre image
+                painter = painterResource(id = R.drawable.arrow), // Chargement d'une autre image
                 contentDescription = "Icône d'envoi",
                 modifier = Modifier.size(50.dp) // Taille de l'image
             )
