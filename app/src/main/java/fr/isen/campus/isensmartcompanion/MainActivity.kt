@@ -16,6 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.*
+import fr.isen.campus.isensmartcompanion.compose.EventsScreen
+import fr.isen.campus.isensmartcompanion.compose.HistoryScreen
 import fr.isen.campus.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
 
 
@@ -100,7 +102,7 @@ fun MainScreen(innerPadding: PaddingValues) {
                 onValueChange = { text = it },
                 modifier = Modifier.weight(1f),
 
-            )
+                )
             Button(
                 onClick = {
                     displayedText = "YOU: $text"
@@ -124,19 +126,7 @@ fun MainScreen(innerPadding: PaddingValues) {
     }
 }
 
-@Composable
-fun EventsScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Events Screen", color = Color.Black)
-    }
-}
 
-@Composable
-fun HistoryScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "History Screen", color = Color.Black)
-    }
-}
 
 /*
 @Preview(showBackground = true)
