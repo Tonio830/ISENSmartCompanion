@@ -7,17 +7,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource // ✅ Ajouté pour charger l'image
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.*
 import fr.isen.campus.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,73 +25,118 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ISENSmartCompanionTheme {
-                Scaffold { innerPadding ->
-                    MainScreen(innerPadding)
-                }
+                MainApp()
             }
         }
     }
 }
-/*
-@Composable
-fun MainScreen(innerPadding: PaddingValues) {
-    Column(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize()
-    ){
-        Images(Painter = painterResource(R.drawable.logoisen),
-        Text(
-            text = "Hello ISEN"
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth().background(Color.Red)
-        ){
-            TextField(
-                value = "test",
-                onValuesChange = {}
-            )
-            //Image(painter = painterResources(R.drawable))
-        }
-    }
-} */
 
 @Composable
-fun MainScreen(innerPadding: PaddingValues) {
-    Column(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally //Ajouté pour centrer le contenu
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.logoisen), // Chargement de l'image depuis drawable
-            contentDescription = "Logo ISEN",
-            modifier = Modifier.size(100.dp) // Taille de l'image
-        )
-        Text(
-            text = "Hello ISEN"
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Red),
-            verticalAlignment = Alignment.CenterVertically // Alignement vertical pour la Row
-        ) {
-            TextField(
-                value = "", // Ajout d'une valeur vide pour éviter l'erreur
-                onValueChange = {}, // Ajout de la fonction pour éviter l'erreur
-                modifier = Modifier.weight(1f) // Permet au champ de texte d'occuper l'espace disponible
-            )
-            Image(
-                painter = painterResource(id = R.drawable.arrow), // Chargement d'une autre image
-                contentDescription = "Icône d'envoi",
-                modifier = Modifier.size(50.dp) // Taille de l'image
-            )
+fun MainApp() {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = { NavigationBar(navController) }
+    ) { innerPadding ->
+        NavHost(navController, startDestination = "home", Modifier.padding(innerPadding)) {
+            composable("home") { MainScreen(innerPadding) }
+            composable("events") { EventsScreen() }
+            composable("history") { HistoryScreen() }
         }
     }
 }
 
+@Composable
+fun NavigationBar(navController: NavController) {
+    NavigationBar {
+        NavigationBarItem(
+            selected = false,
+            onClick = { navController.navigate("home") },
+            icon = { Icon(painterResource(id = R.drawable.house), contentDescription = "Home") },
+            label = { Text("Home") }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { navController.navigate("events") },
+            icon = { Icon(painterResource(id = R.drawable.event), contentDescription = "Events") },
+            label = { Text("Events") }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { navController.navigate("history") },
+            icon = { Icon(painterResource(id = R.drawable.book), contentDescription = "History") },
+            label = { Text("History") }
+        )
+    }
+}
+
+@Composable
+fun MainScreen(innerPadding: PaddingValues) {
+    var text by remember { mutableStateOf("") }
+    var displayedText by remember { mutableStateOf("") }
+    var responseText by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logoisen),
+            contentDescription = "Logo ISEN",
+            modifier = Modifier.size(100.dp)
+        )
+        Text(text = "Hello ISEN")
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextField(
+                value = text,
+                onValueChange = { text = it },
+                modifier = Modifier.weight(1f),
+
+            )
+            Button(
+                onClick = {
+                    displayedText = "YOU: $text"
+                    responseText = "REPONSE: Je ne comprends pas"
+                },
+                modifier = Modifier.padding(start = 8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.arrow),
+                    contentDescription = "Send Arrow"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(text = displayedText, color = Color.Black)
+        if (responseText.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = responseText, color = Color.Gray)
+        }
+    }
+}
+
+@Composable
+fun EventsScreen() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "Events Screen", color = Color.Black)
+    }
+}
+
+@Composable
+fun HistoryScreen() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "History Screen", color = Color.Black)
+    }
+}
 
 /*
 @Preview(showBackground = true)
