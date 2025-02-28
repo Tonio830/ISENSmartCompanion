@@ -5,14 +5,96 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
+import fr.isen.campus.isensmartcompanion.compose.isenEvent
 import fr.isen.campus.isensmartcompanion.EventDetailActivity
+import fr.isen.campus.isensmartcompanion.RetrofitInstance
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EventsScreen() {
+    val context = LocalContext.current
+    var events by remember { mutableStateOf<List<isenEvent>?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Coroutine Scope pour appeler les données en asynchrone
+    val coroutineScope = rememberCoroutineScope()
+
+    // Utilisation de la coroutine pour récupérer les événements
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            try {
+                val response = RetrofitInstance.api.getEventList()  // Appel suspend
+                events = response
+                isLoading = false
+            } catch (e: Exception) {
+                errorMessage = "Erreur réseau : ${e.message}"
+                isLoading = false
+            }
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Événements ISEN") })
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+                !errorMessage.isNullOrEmpty() -> {
+                    Text(text = errorMessage!!, color = Color.Red, modifier = Modifier.align(Alignment.Center))
+                }
+                !events.isNullOrEmpty() -> {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(events!!) { event ->
+                            EventButton(event = event) {
+                                val intent = Intent(context, EventDetailActivity::class.java).apply {
+                                    putExtra("event", event)
+                                }
+                                context.startActivity(intent)
+                            }
+                        }
+                    }
+                }
+                else -> {
+                    Text(text = "Aucun événement trouvé.", modifier = Modifier.align(Alignment.Center))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun EventButton(event: isenEvent, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .height(60.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+    ) {
+        Text(text = event.title) // Remplacer "name" par "title" si c'est le bon champ
+    }
+}
+
+
+/*
 // Liste d'événements fictifs
 val fakeEventsList = listOf(
     isenEvent(1, "BDE Evening", "Soirée organisée par le BDE", "15 Mars 2025", "Salle des fêtes", "Fête"),
@@ -20,10 +102,10 @@ val fakeEventsList = listOf(
     isenEvent(3, "Journée Cohésion", "Rencontre entre promos", "5 Septembre 2025", "Campus ISEN", "Rencontre")
 )
 
-
+// Ancienne version avec des événements fictifs
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EventsScreen() {
+fun EventsScreen_Fake() {
     val context = LocalContext.current
 
     Scaffold(
@@ -49,18 +131,4 @@ fun EventsScreen() {
         }
     }
 }
-
-@Composable
-fun EventButton(event: isenEvent, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp) // Agrandir l'espace autour du bouton
-            .height(60.dp), // Ajuster la hauteur du bouton
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray) // Changer la couleur en gris
-    ) {
-        Text(text = event.title)
-    }
-}
-
+*/

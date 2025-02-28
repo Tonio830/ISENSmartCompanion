@@ -37,9 +37,9 @@ class EventDetailActivity : ComponentActivity() {
 fun EventDetailScreen(event: isenEvent, onBackClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Détails de l'événement", color = Color.Black)
-            Spacer(modifier = Modifier.height(20.dp))
             Text(text = "Titre : ${event.title}", color = Color.Black)
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(text = "Détails de l'événement : ${event.description}", color = Color.Black)
             Text(text = "Date : ${event.date}", color = Color.Black)
             Text(text = "Lieu : ${event.location}", color = Color.Black)
             Text(text = "Catégorie : ${event.category}", color = Color.Black)
