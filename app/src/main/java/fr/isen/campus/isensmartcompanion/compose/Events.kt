@@ -11,11 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
-import fr.isen.campus.isensmartcompanion.compose.isenEvent
 import fr.isen.campus.isensmartcompanion.EventDetailActivity
-import fr.isen.campus.isensmartcompanion.RetrofitInstance
+import fr.isen.campus.isensmartcompanion.data.isenEvent
+import fr.isen.campus.isensmartcompanion.retrofit.RetrofitInstance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

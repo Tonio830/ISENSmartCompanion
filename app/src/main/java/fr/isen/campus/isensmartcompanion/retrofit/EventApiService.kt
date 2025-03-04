@@ -1,6 +1,6 @@
-package fr.isen.campus.isensmartcompanion
+package fr.isen.campus.isensmartcompanion.retrofit
 
-import fr.isen.campus.isensmartcompanion.compose.isenEvent
+import fr.isen.campus.isensmartcompanion.data.isenEvent
 import retrofit2.http.GET
 
 interface EventApiService {

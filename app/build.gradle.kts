@@ -2,13 +2,28 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
+
+buildscript {
+    dependencies {
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+    }
 }
 
 android {
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     namespace = "fr.isen.campus.isensmartcompanion"
     compileSdk = 35
 
     defaultConfig {
+
+        buildConfigField("String", "GEMINI_API_KEY", "\"${project.properties["GEMINI_API_KEY"]}\"")
+
         applicationId = "fr.isen.campus.isensmartcompanion"
         minSdk = 24
         targetSdk = 35
@@ -44,6 +59,12 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
+    implementation(libs.generativeai)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

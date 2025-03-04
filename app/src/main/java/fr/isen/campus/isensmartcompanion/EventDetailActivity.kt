@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ButtonDefaults
-import fr.isen.campus.isensmartcompanion.compose.isenEvent
+import fr.isen.campus.isensmartcompanion.data.isenEvent
 import fr.isen.campus.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
 
 class EventDetailActivity : ComponentActivity() {

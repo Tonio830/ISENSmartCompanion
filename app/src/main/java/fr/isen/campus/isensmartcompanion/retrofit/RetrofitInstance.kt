@@ -1,4 +1,4 @@
-package fr.isen.campus.isensmartcompanion
+package fr.isen.campus.isensmartcompanion.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

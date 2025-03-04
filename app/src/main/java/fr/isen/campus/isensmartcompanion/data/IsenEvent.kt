@@ -1,4 +1,4 @@
-package fr.isen.campus.isensmartcompanion.compose
+package fr.isen.campus.isensmartcompanion.data
 
 import java.io.Serializable
 
