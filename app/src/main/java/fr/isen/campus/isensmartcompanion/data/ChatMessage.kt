@@ -9,5 +9,5 @@ data class ChatMessage(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val question: String,
     val answer: String,
-    val date: Long = System.currentTimeMillis() // Timestamp de la date de l'échange
+    val date: Long = System.currentTimeMillis()
 )

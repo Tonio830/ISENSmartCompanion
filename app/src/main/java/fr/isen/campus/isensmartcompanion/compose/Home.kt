@@ -30,7 +30,6 @@ fun MainScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    // Récupération de l'instance de la base de données et du DAO
     val db = remember { ChatDatabase.getDatabase(context) }
     val chatDao = remember { db.chatDao() }
 
@@ -48,7 +47,6 @@ fun MainScreen(innerPadding: PaddingValues) {
         Text(text = "Hello ISEN")
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Zone de saisie de texte
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,17 +63,16 @@ fun MainScreen(innerPadding: PaddingValues) {
             Button(
                 onClick = {
                     displayedText = "YOU: $text"
-                    responseText = "" // Reset avant la réponse
-                    isLoading = true // Active le chargement
+                    responseText = ""
+                    isLoading = true
 
                     coroutineScope.launch {
                         try {
-                            // Appel à l'API Gemini pour obtenir la réponse
+
                             val aiResponse = GeminiApiService.getAiResponse(text)
                             isLoading = false
-                            responseText = aiResponse // Mise à jour avec la réponse
+                            responseText = aiResponse
 
-                            // Enregistrer l'échange dans la base de données sur un thread de fond
                             val chatMessage = ChatMessage(question = text, answer = aiResponse)
                             withContext(Dispatchers.IO) {
                                 chatDao.insertMessage(chatMessage)
@@ -98,10 +95,8 @@ fun MainScreen(innerPadding: PaddingValues) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Affichage du texte utilisateur
         Text(text = displayedText, color = Color.Black)
 
-        // Affichage de l'indicateur de chargement ou de la réponse de Gemini
         if (isLoading) {
             Spacer(modifier = Modifier.height(10.dp))
             CircularProgressIndicator()

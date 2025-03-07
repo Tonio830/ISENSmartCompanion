@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface EventApiService {
     @GET("events.json")
-    suspend fun getEventList(): List<isenEvent>  // Utilise suspend ici
+    suspend fun getEventList(): List<isenEvent>
 }
 

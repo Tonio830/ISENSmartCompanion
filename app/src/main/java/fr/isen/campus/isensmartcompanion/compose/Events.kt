@@ -24,10 +24,8 @@ fun EventsScreen() {
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    // Coroutine Scope pour appeler les données en asynchrone
     val coroutineScope = rememberCoroutineScope()
 
-    // Utilisation de la coroutine pour récupérer les événements
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             try {
@@ -88,20 +86,18 @@ fun EventButton(event: isenEvent, onClick: () -> Unit) {
             .height(60.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
     ) {
-        Text(text = event.title) // Remplacer "name" par "title" si c'est le bon champ
+        Text(text = event.title)
     }
 }
 
 
 /*
-// Liste d'événements fictifs
 val fakeEventsList = listOf(
     isenEvent(1, "BDE Evening", "Soirée organisée par le BDE", "15 Mars 2025", "Salle des fêtes", "Fête"),
     isenEvent(2, "Gala ISEN", "Gala annuel des étudiants", "10 Avril 2025", "Hôtel de ville", "Gala"),
     isenEvent(3, "Journée Cohésion", "Rencontre entre promos", "5 Septembre 2025", "Campus ISEN", "Rencontre")
 )
 
-// Ancienne version avec des événements fictifs
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventsScreen_Fake() {
@@ -121,7 +117,7 @@ fun EventsScreen_Fake() {
                 items(fakeEventsList) { event ->
                     EventButton(event = event) {
                         val intent = Intent(context, EventDetailActivity::class.java).apply {
-                            putExtra("event", event) // On passe l'objet isenEvent
+                            putExtra("event", event)
                         }
                         context.startActivity(intent)
                     }

@@ -32,7 +32,6 @@ fun HistoryScreen() {
     val chatHistory = remember { mutableStateOf(emptyList<ChatMessage>()) }
     val coroutineScope = rememberCoroutineScope()
 
-    // Charger l'historique depuis la base de données en arrière-plan
     LaunchedEffect(Unit) {
         coroutineScope.launch(Dispatchers.IO) {
             val messages = chatDao.getAllMessages()
@@ -57,10 +56,9 @@ fun HistoryScreen() {
                 Text(text = "Réponse: ${message.answer}")
                 Text(text = "Date: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(Date(message.date))}")
 
-                // Ajouter un bouton pour supprimer un message
                 IconButton(onClick = {
                     coroutineScope.launch(Dispatchers.IO) {
-                        chatDao.deleteMessage(message) // Supprimer en arrière-plan
+                        chatDao.deleteMessage(message)
                     }
                 }) {
                     Icon(Icons.Default.Delete, contentDescription = "Delete")
