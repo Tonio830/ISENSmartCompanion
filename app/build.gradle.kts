@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.devtools.ksp")
 }
 
 buildscript {
@@ -65,6 +66,25 @@ dependencies {
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
     implementation(libs.generativeai)
+
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    // Kotlin Extensions et support Coroutines pour Room
+    implementation("androidx.room:room-ktx:$room_version")
+    // Support optionnel pour RxJava2 avec Room
+    implementation("androidx.room:room-rxjava2:$room_version")
+    // Support optionnel pour RxJava3 avec Room
+    implementation("androidx.room:room-rxjava3:$room_version")
+    // Support optionnel pour Guava (Optional et ListenableFuture)
+    implementation("androidx.room:room-guava:$room_version")
+    // Test helpers pour Room (utile pour les tests unitaires)
+    testImplementation("androidx.room:room-testing:$room_version")
+    // Support optionnel pour l'intégration avec Paging 3
+    implementation("androidx.room:room-paging:$room_version")
+
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

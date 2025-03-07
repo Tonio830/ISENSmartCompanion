@@ -13,8 +13,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import fr.isen.campus.isensmartcompanion.R
+import fr.isen.campus.isensmartcompanion.data.ChatDatabase
+import fr.isen.campus.isensmartcompanion.data.ChatMessage
 import fr.isen.campus.isensmartcompanion.retrofit.GeminiApiService
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun MainScreen(innerPadding: PaddingValues) {
@@ -25,6 +29,10 @@ fun MainScreen(innerPadding: PaddingValues) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    // Récupération de l'instance de la base de données et du DAO
+    val db = remember { ChatDatabase.getDatabase(context) }
+    val chatDao = remember { db.chatDao() }
 
     Column(
         modifier = Modifier
@@ -59,12 +67,19 @@ fun MainScreen(innerPadding: PaddingValues) {
                     displayedText = "YOU: $text"
                     responseText = "" // Reset avant la réponse
                     isLoading = true // Active le chargement
+
                     coroutineScope.launch {
                         try {
                             // Appel à l'API Gemini pour obtenir la réponse
                             val aiResponse = GeminiApiService.getAiResponse(text)
                             isLoading = false
                             responseText = aiResponse // Mise à jour avec la réponse
+
+                            // Enregistrer l'échange dans la base de données sur un thread de fond
+                            val chatMessage = ChatMessage(question = text, answer = aiResponse)
+                            withContext(Dispatchers.IO) {
+                                chatDao.insertMessage(chatMessage)
+                            }
                         } catch (e: Exception) {
                             isLoading = false
                             responseText = "Erreur : ${e.message}"
@@ -96,4 +111,3 @@ fun MainScreen(innerPadding: PaddingValues) {
         }
     }
 }
-
